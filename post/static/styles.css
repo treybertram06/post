@@ -1,0 +1,296 @@
+:root {
+    --secondaryColour: #388C53;
+    --primaryColour: #5BFF8F; 
+}
+
+.hide {
+    display: none;
+}
+
+
+body {
+    background-color: var(--primaryColour);
+    color: black;
+    font-family: serif;
+    outline-style: solid;
+    outline-color: var(--secondaryColour);
+    outline-width: thick;
+    padding: 10px;
+}
+
+#siteTitle {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#formTitle {
+    width: 300px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    margin: 2.5px;
+}
+
+#formContent {
+    width: 300px;
+    height: 100px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    margin: 2.5px;
+}
+
+#postHead {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#buttonStyle01 {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    background-color: var(--secondaryColour);
+    color: white;
+    font-weight: bold;
+}
+
+#buttonStyle01:hover {
+    background-color: var(--primaryColour);
+    color: black;
+    font-weight: bold;
+}
+
+#buttonStyle02 {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--primaryColour);
+    padding: 5px;
+    background-color: var(--primaryColour);
+    color: black;
+    font-weight: bold;
+    margin: 2.5px;
+}
+
+#buttonStyle02:hover {
+    background-color: var(--secondaryColour);
+    color: white;
+    font-weight: bold;
+}
+
+#buttonContainer1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: center;
+    padding: 10px;
+}
+
+#formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    padding: 10px;
+}
+
+#formContainerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: center;
+    padding: 10px;
+}
+
+#searchContainer {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+}
+
+#showingResults {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#loginoutContainer {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+}
+
+#createPostForm {
+    background-color: var(--secondaryColour);
+    border-radius: 15px;
+    padding: 10px;
+    border-left: 100px solid var(--secondaryColour);
+    border-bottom: 100px solid var(--secondaryColour);
+}
+
+#createPostContainer {
+    position: fixed;
+    bottom: -120px;
+    left: -435px;
+    padding: 10px;
+    transition: left 0.5s ease-out;
+    display: flex;
+    flex-direction: row;
+}
+
+#createPostContainer.show {
+    left: -90px;
+}
+
+#showPostButton, #closePostButton {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    background-color: var(--secondaryColour);
+    color: white;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 170px;
+}
+
+#showPostButton:hover, #closePostButton:hover {
+    background-color: var(--primaryColour);
+    color: black;
+    font-weight: bold;
+}
+
+#emptySpace {
+    height: 220px;
+}
+
+#imageUploadForm {
+    width: 300px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    margin: 2.5px;
+}
+
+#likeDislikeContainer {
+    display: flex;
+    align-items: center;
+}
+
+#likeButton, #dislikeButton {
+    background-color: transparent;
+    border: none;
+    margin-top: 10px;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#commentForm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#comments {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0px;
+    margin-left: 50px;
+}
+
+#commentButton {
+    background-color: transparent;
+    border: none;
+    margin-top: -5px;
+    margin-left: 10px;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#deleteButton {
+    background-color: transparent;
+    border: none;
+    margin-top: 0px;
+    margin-left: 10px;
+    width: 15px;
+    height: 15px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("images/trash.png");
+}
+
+#commentTextarea {
+    width: 100%;
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid var(--secondaryColour);
+    padding: 5px;
+    margin: 2.5px;
+}
+
+#commentSubmitButton {
+    background-color: transparent;
+    border: none;
+    margin-top: 10px;
+    margin-left: 0px;
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#commentSubmitButton {
+    background-image: url("images/commentSubmit.png");
+}
+
+#likeButton {
+    background-image: url("images/up.tiff");
+}
+
+#dislikeButton {
+    background-image: url("images/down.tiff");
+}
+
+#commentButton {
+    background-image: url("images/comment.png");
+}
+
+#likeButton:hover, #dislikeButton:hover, #commentButton:hover, #deleteButton:hover {
+    opacity: 0.7;
+}
+
+#likeButton:active, #dislikeButton:active, #commentButton:active, #deleteButton:active {
+    opacity: 0.9;
+}
+
+#pointsCounter {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0px 10px;
+}
+
+#username {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#replyContent {
+    margin-left: 20px;
+    margin-top: 25px;
+}

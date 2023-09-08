@@ -1,0 +1,30 @@
+To resolve this issue, you need to perform a database migration which will include this new field in your `comment` table. Flask-Migrate is a great extension that handles SQLAlchemy database migrations for Flask applications. It provides a command line interface to handle migrations.
+
+Here's how you can set it up:
+
+1. Install Flask-Migrate:
+
+```bash
+pip install Flask-Migrate
+```
+
+2. Import and initialize it in your application:
+
+```python
+from flask_migrate import Migrate
+
+migrate = Migrate(app, db)
+```
+
+3. Now you can use the `flask db` command to manage your database:
+
+```bash
+flask db init  # Creates a new migration repository
+flask db migrate  # Generates an automatic migration script
+flask db upgrade  # Applies the migration to the database
+```
+
+The `migrate` command will generate a migration script for you to review. In this case, it should contain the addition of-
+-the `parent_id` field to the `comment` table. The `upgrade` command will apply this migration to the database.
+
+Remember to run these commands every time you make a change to your database models.

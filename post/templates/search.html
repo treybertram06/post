@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>POST</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <h3 id="welcome">Welcome, {{ current_user.username }}!</h3>
+        <div id="searchContainer">
+            <form method="GET" action="/search">
+                <input name="query" type="text" placeholder="Search posts..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <h1 id="siteTitle">Search Results</h1>
+        <br>
+        <hr>
+        <div id="showingResults">
+            Showing results for: "{{ query }}"
+        </div>
+        <hr>
+
+        {% for post in posts %}
+        <h2>{{ post.title }} by {{ post.user.username }}</h2>
+        <p>{{ post.content }}</p>
+
+        {% if post.image %}
+        <img src="{{ url_for('uploads', filename=post.image) }}" alt="Post image"><br>
+        {% endif %}
+
+        {% if current_user.is_authenticated and current_user.id == post.user_id %}
+            <button id="postButton" class="delete-post" data-id="{{ post.id }}">Delete</button>
+        {% endif %}
+
+        <div id="likeDislikeContainer">
+            <form action="{{ url_for('like', post_id=post.id) }}" method="post">
+                <button type="submit" id="likeButton"></button>
+            </form>
+            <span id="pointsCounter">{{ post.count_likes() - post.count_dislikes() }}</span>
+            <form action="{{ url_for('dislike', post_id=post.id) }}" method="post">
+                <button type="submit"id="dislikeButton"></button>
+            </form>
+            
+        </div>
+        <hr>
+        {% endfor %}
+
+        <div id="loginoutContainer">
+            {% if not current_user.is_authenticated %}
+                <button id="loginButton" onclick="window.location.href='/registration'">Login</button>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <button id="logoutButton" onclick="confirmLogout()">Logout</button>
+            {% endif %}
+        </div>
+
+        <div id="buttonContainer1">
+            <button onclick="window.location.href='/'" id="buttonStyle01">Return to Home</button>
+        </div>
+
+    <body>
+</html>

@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>POST</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'styles.css') }}" />
+  </head>
+  <body>
+    <br />
+    <h1 id="siteTitle">Registration</h1>
+    <br />
+    <hr />
+
+    <div id="formContainerContainer">
+      <div id="formContainer">
+        <form method="POST" action="{{ url_for('register') }}">
+          <input id="formTitle" name="username" placeholder="Username" required /><br />
+          <input id="formTitle" name="password" type="password" placeholder="Password" required /><br />
+          <button id="buttonStyle01" type="submit">Register</button>
+        </form>
+      </div>
+
+      <div id="formContainer">
+        <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+          <input id="formTitle" name="username" placeholder="Username" required /><br />
+          <input id="formTitle" name="password" type="password" placeholder="Password" required /><br />
+          <button id="buttonStyle01" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <div id="buttonContainer1">
+      <button onclick="window.location.href='/'" id="buttonStyle01">Return to Home</button>
+    </div>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+      
+          var formData = new FormData(this);
+      
+          fetch('/login', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  window.location.href = '/';
+              } else {
+                  alert(data.message);
+              }
+          });
+      });
+      </script>
+  </body>
+</html>

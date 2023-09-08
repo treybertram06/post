@@ -1,0 +1,202 @@
+<html>
+    <head>
+        <title>POST</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <h3 id="welcome">Welcome, {{ current_user.username }}!</h3>
+        <div id="searchContainer">
+            <form method="GET" action="/search">
+                <input name="query" type="text" placeholder="Search posts..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <h1 id="siteTitle">POST practice</h1>
+        <br>
+        <hr>
+
+        {% for post in posts %}
+        <div id="postHead">
+            <h2>{{ post.title }}</h2>
+            <p id="username">  · {{ post.user.username }}</p>
+            {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                <button id="deleteButton" class="delete-post" data-id="{{ post.id }}"></button>
+            {% endif %}
+        </div>
+        <p>{{ post.content }}</p>
+
+        {% if post.image %}
+        <img src="{{ url_for('uploads', filename=post.image) }}" alt="Post image"><br>
+        {% endif %}
+
+
+
+        <div id="likeDislikeContainer">
+            <form action="{{ url_for('like', post_id=post.id) }}" method="post">
+                <button type="submit" id="likeButton"></button>
+            </form>
+            <span id="pointsCounter">{{ post.count_likes() - post.count_dislikes() }}</span>
+            <form action="{{ url_for('dislike', post_id=post.id) }}" method="post">
+                <button type="submit"id="dislikeButton"></button>
+            </form>
+            <button class="show-comments" id="commentButton"></button>
+            <div>
+                <!-- Form to create a new comment -->
+                {% if current_user.is_authenticated %}
+                    <form id="commentForm" method="POST" action="{{ url_for('comment', post_id=post.id) }}">
+                        <textarea id="commentTextarea" name="content" placeholder="Add a comment..." required></textarea>
+                        <button type="submit" id="commentSubmitButton"></button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        <div id="commentSection" class="commentSection comments hide">
+            <!-- Display comments -->
+            {% if post.comments %}
+                {% for comment in post.comments %}
+                    <hr>
+                    <div id="comments">
+                        <p id="username">· {{ comment.user.username }}</p>
+                        <div id="commentSubcontainer">
+                            <p id="replyContent">{{ comment.content }}</p>
+                            <div id="likeDislikeContainer">
+                            <form action="{{ url_for('like_comment', comment_id=comment.id) }}" method="post">
+                                <button type="submit" id="likeButton" style="margin-left: 10px;"></button>
+                            </form>
+                            <span id="pointsCounter">{{ comment.count_likes() - comment.count_dislikes() }}</span>
+                            <form action="{{ url_for('dislike_comment', comment_id=comment.id) }}" method="post">
+                                <button type="submit"id="dislikeButton"></button>
+                            </form>
+                            <div>
+                                <form id="commentForm" method="POST" action="{{ url_for('reply', parent_id=comment.id) }}">
+                                    <textarea id="commentTextArea" name="content" placeholder="Add a reply..." required></textarea>
+                                    <button id="commentSubmitButton" type="submit"></button>
+                                </form>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.id == comment.user_id %}
+                            <button id="deleteButton" style="margin-left: 10px; margin-top: -10px;" class="delete-comment" data-id="{{ comment.id }}"></button>
+                            {% endif %}
+                            </div>
+                        </div>
+
+                        {% for reply in comment.replies %}
+                            <div>
+                                <p>{{ reply.user.username }}: {{ reply.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <hr>
+                <p>No comments yet</p>
+            {% endif %}
+        </div>
+        <hr>
+        {% endfor %}
+
+        <div id="createPostContainer">
+            <form method="POST" action="/post" enctype="multipart/form-data" id="createPostForm">
+                <input name="title" type="text" placeholder="Title" id="formTitle" required><br>
+                <textarea name="content" placeholder="Content" id="formContent" required></textarea><br>
+                <input name="image" type="file" id="imageUploadForm"><br>
+                <button type="submit" id="buttonStyle02">Submit</button>
+            </form>
+            <button id="showPostButton"> Show </button>
+            <button id="closePostButton" style="display: none;"> Hide </button>
+        </div>
+
+        <div id="loginoutContainer">
+            {% if not current_user.is_authenticated %}
+                <button id="buttonStyle01" onclick="window.location.href='/registration'">Login</button>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <button id="buttonStyle01" onclick="confirmLogout()">Logout</button>
+            {% endif %}
+        </div>
+
+        <div id="emptySpace"></div>
+
+        <script>
+
+            document.querySelectorAll('.show-comments').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var comments = this.parentNode.nextElementSibling;
+                    comments.classList.toggle('hide');
+                });
+            });
+
+            document.getElementById('showPostButton').addEventListener('click', function() {
+                document.getElementById('createPostContainer').classList.add('show');
+                this.style.display = 'none'; // Hide the "Show Post Form" button
+                document.getElementById('closePostButton').style.display = 'block'; // Show the "Close Post Form" button
+            });
+            
+            document.getElementById('closePostButton').addEventListener('click', function() {
+                document.getElementById('createPostContainer').classList.remove('show');
+                this.style.display = 'none'; // Hide the "Close Post Form" button
+                document.getElementById('showPostButton').style.display = 'block'; // Show the "Show Post Form" button
+            });
+
+            function confirmLogout() {
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href='/logout';
+                }
+            }
+
+            document.querySelectorAll('.delete-post').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+        
+                    if (confirm('Are you sure you want to delete this post?')) {
+                        var id = this.dataset.id;
+        
+                        fetch('/post/' + id, {
+                            method: 'DELETE',
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                return response.text();
+                            } else {
+                                throw new Error('Could not delete post');
+                            }
+                        })
+                        .then(function() {
+                            window.location.reload();
+                        })
+                        .catch(function(error) {
+                            console.error(error);
+                        });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.delete-comment').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+            
+                    if (confirm('Are you sure you want to delete this comment?')) {
+                        var id = this.dataset.id;
+            
+                        fetch('/comment/' + id, {
+                            method: 'DELETE',
+                        })
+                        .then(function(response) {
+                            if (response.ok) {
+                                return response.text();
+                            } else {
+                                throw new Error('Could not delete comment');
+                            }
+                        })
+                        .then(function() {
+                            window.location.reload();
+                        })
+                        .catch(function(error) {
+                            console.error(error);
+                        });
+                    }
+                });
+            });
+        </script>
+
+    <body>
+</html>
